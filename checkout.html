@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - Checkout</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f8f1e7;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #c37960;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        nav a {
+            float: left;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .logout-btn {
+            float: right;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            margin: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            height:30px;
+        }
+        .logout-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 30px 10px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .cart-section, .payment-section {
+            flex: 1 1 340px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+            padding: 30px 25px;
+            min-width: 320px;
+            max-width: 500px;
+        }
+        .cart-section h2, .payment-section h2 {
+            color: #c37960;
+            margin-top: 0;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .checkout-item {
+            margin: 14px 0;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: #faf7f3;
+        }
+        .checkout-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #eee;
+        }
+        .checkout-details {
+            flex: 1;
+        }
+        .checkout-item h3 {
+            margin: 0 0 4px 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .checkout-item p {
+            margin: 2px 0;
+            color: #555;
+            font-size: 0.97rem;
+        }
+        .total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+            color: #c37960;
+        }
+        .payment-section button,
+        .payment-section .pay-btn {
+            padding: 10px 20px;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 10px 0 0;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .payment-section button:hover,
+        .payment-section .pay-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .payment-details {
+            margin-top: 10px;
+            display: none;
+        }
+        .payment-details input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .address-box {
+            margin-top: 20px;
+        }
+        .address-box textarea {
+            width: 100%;
+            max-width: 350px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        
+    </style>
+    <script>
+        let selectedPaymentMode = null;
+
+        function displayCartItems() {
+            const container = document.getElementById("cart-items");
+            let total = 0;
+            const username = localStorage.getItem("username");
+            if (!username) {
+                container.innerHTML = "<p style='color:#ff6f61;'>Please log in to view your cart.</p>";
+                document.getElementById("total-price").textContent = "";
+                document.getElementsByClassName("logout-btn")[0].innerHTML = "Login";
+                return;
+            }
+            const cartItems = JSON.parse(localStorage.getItem("cart_"+username)) || [];
+            container.innerHTML = "";
+
+            if (cartItems.length === 0) {
+                container.innerHTML = "<p>Your cart is empty.</p>";
+                document.getElementById("total-price").textContent = "";
+                return;
+            }
+
+            cartItems.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "checkout-item";
+                let imgHtml = "";
+                if (item.image) {
+                    imgHtml = "<img src='"+item.image+"' alt='Item Image'>";
+                } else {
+                    imgHtml = "<img src='default-cake.jpg' alt='Item Image'>";
+                }
+                let detailsHtml = `<div class="checkout-details"><h3>${item.name || "Custom Cake"}</h3>`;
+                if (item.name === "Custom Cake") {
+                    detailsHtml += "<p>Flavor: "+item.flavor+"</p><p>Topping: "+item.topping+"</p>";
+                }
+                detailsHtml += "<p>Price: ₹"+item.price+"</p></div>";
+                div.innerHTML = imgHtml + detailsHtml;
+                container.appendChild(div);
+                total += Number(item.price) || 0;
+            });
+
+            document.getElementById("total-price").textContent = `Total: ₹${total}`;
+        }
+
+        function showPaymentDetails(mode) {
+            selectedPaymentMode = mode;
+            const details = document.querySelectorAll(".payment-details");
+            details.forEach(detail => detail.style.display = "none");
+
+            const selectedDetail = document.getElementById(mode+"-details");
+            if (selectedDetail) {
+                selectedDetail.style.display = "block";
+            }
+        }
+
+        function confirmPayment() {
+            const address = document.getElementById("address").value.trim();
+            const username = localStorage.getItem("username");
+            if (!username) {
+                alert("Please log in to place your order.");
+                return;
+            }
+            const cartItems = JSON.parse(localStorage.getItem("cart_"+username)) || [];
+            if (cartItems.length === 0) {
+                alert("Your cart is empty.");
+                return;
+            }
+            if (!selectedPaymentMode) {
+                alert("Please select a payment option.");
+                return;
+            }
+            if (selectedPaymentMode === "upi") {
+                const upiId = document.querySelector("#upi-details input").value.trim();
+                if (!upiId) {
+                    alert("Please enter your UPI ID.");
+                    return;
+                }
+            } else if (selectedPaymentMode === "card") {
+                const cardNumber = document.querySelector("#card-details input[placeholder='Card Number']").value.trim();
+                const expiryDate = document.querySelector("#card-details input[placeholder='Expiry Date (MM/YY)']").value.trim();
+                const cvv = document.querySelector("#card-details input[placeholder='CVV']").value.trim();
+                if (!cardNumber || !expiryDate || !cvv) {
+                    alert("Please fill in all card details.");
+                    return;
+                }
+            }
+            if (!address) {
+                alert("Please enter your address.");
+                return;
+            }
+            alert("Thank you for your purchase! Your order has been placed.");
+            localStorage.removeItem("cart_"+username);
+            window.location.href = "home.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body onload="displayCartItems()">
+    <header>
+        Checkout
+    </header>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="cart.html">Cart</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+    <div class="container">
+        <div class="cart-section">
+            <h2>Your Cart</h2>
+            <div id="cart-items">
+            </div>
+            <div class="total" id="total-price">
+            </div>
+        </div>
+        <div class="payment-section">
+            <h2>Payment Options</h2>
+            <button type="button" onclick="showPaymentDetails('upi')">UPI</button>
+            <button type="button" onclick="showPaymentDetails('card')">Card</button>
+            <button type="button" onclick="showPaymentDetails('cod')">Cash on Delivery</button>
+
+            <div id="upi-details" class="payment-details">
+                <p>Enter your UPI ID:</p>
+                <input type="text" placeholder="e.g., yourname@upi" style="width: 50%;">
+            </div>
+            <div id="card-details" class="payment-details">
+                <p>Enter your Card Details:</p>
+                <input type="text" placeholder="Card Number" maxlength="19" style="width: 50%;">
+                <input type="text" placeholder="Expiry Date (MM/YY)" maxlength="5" style="width: 50%;">
+                <input type="text" placeholder="CVV" maxlength="4" style="width: 50%;">
+            </div>
+            <div id="cod-details" class="payment-details">
+                <p>Cash on Delivery selected. Please ensure the correct address is provided.</p>
+            </div>
+
+            <div class="address-box">
+                <h3>Delivery Address</h3>
+                <textarea id="address" placeholder="Enter your delivery address" rows="4"></textarea>
+            </div>
+
+            <button class="pay-btn" onclick="confirmPayment()">Confirm Payment</button>
+        </div>
+    </div>
+</body>
+</html>

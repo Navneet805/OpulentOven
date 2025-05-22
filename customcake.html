@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - Custom Cake</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f1e7;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #c37960;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            float: left;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .logout-btn {
+            float: right;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            margin: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            height:30px;
+        }
+        .logout-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            justify-content: center;
+            max-width: 1100px;
+            margin: 30px auto 0 auto;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+        .custom-form {
+            flex: 1 1 340px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+            padding: 30px 25px;
+            min-width: 320px;
+            max-width: 400px;
+        }
+        .custom-form h2 {
+            margin-top: 0;
+            color: #c37960;
+            text-align: center;
+        }
+        .form-group {
+            margin: 18px 0;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            background: #f9f9f9;
+        }
+        .form-group input[type="file"] {
+            width: 90%;
+            max-width: 260px;
+            background: #fff;
+            padding: 7px 0;
+            border: none;
+        }
+        #price-display {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #c37960;
+            margin-top: 18px;
+            text-align: center;
+        }
+        .preview-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+            padding: 30px 25px;
+            min-width: 320px;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top:5px;
+        }
+        .preview-card h2 {
+            color: #c37960;
+            margin-bottom: 10px;
+        }
+        .preview-card p {
+            margin: 6px 0;
+            font-size: 1rem;
+        }
+        .preview-card img {
+            max-width: 90%;
+            border-radius: 10px;
+            margin: 18px 0 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .preview-card button {
+            width: 80%;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+        .add-to-cart-btn {
+            padding: 10px 20px;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        
+    </style>
+    <script>
+        let customCake = {
+            flavor: "",
+            topping: "",
+            image: null,
+            price: 0
+        };
+
+        const flavorPrices = {
+            Chocolate: 500,
+            Vanilla: 400,
+            Strawberry: 450
+        };
+
+        const toppingPrices = {
+            Sprinkles: 50,
+            Fruits: 100,
+            "Chocolate Chips": 150
+        };
+
+        const presetImages = {
+            "": "",
+            "Doraemon": "doremon.jpg",
+            "Shinchan": "shinchan.jpeg",
+            "Pokemon": "pokemon.jpg"
+        };
+
+        function calculatePrice() {
+            const flavor = document.getElementById("flavor").value;
+            const topping = document.getElementById("topping").value;
+            const basePrice = flavorPrices[flavor] || 0;
+            const toppingPrice = toppingPrices[topping] || 0;
+            const totalPrice = basePrice + toppingPrice;
+            customCake.price = totalPrice;
+            customCake.flavor = flavor;
+            customCake.topping = topping;
+            document.getElementById("price-display").textContent = "Price: ₹"+totalPrice;
+            updatePreview();
+        }
+
+        function handlePresetImage() {
+            const preset = document.getElementById("preset-image").value;
+            if (presetImages[preset]) {
+                customCake.image = presetImages[preset];
+                document.getElementById("image").value = ""; 
+            } else {
+                customCake.image = null;
+            }
+            updatePreview();
+        }
+
+        function handleUploadImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    customCake.image = e.target.result;
+                    document.getElementById("preset-image").value = ""; 
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updatePreview() {
+            const previewDiv = document.getElementById("preview");
+            previewDiv.innerHTML = ""; 
+
+            const h2 = document.createElement("h2");
+            h2.innerHTML = "Preview";
+            const p = document.createElement("p");
+            p.innerHTML = "Flavor: " + (customCake.flavor || "<span style='color:#c37960'>Not selected</span>");
+            const p1 = document.createElement("p");
+            p1.innerHTML = "Topping: " + (customCake.topping || "<span style='color:#c37960'>Not selected</span>");
+            const p2 = document.createElement("p");
+            p2.innerHTML = "Price: ₹" + (customCake.price || 0);
+
+            let img = null;
+            if (customCake.image) {
+                img = document.createElement("img");
+                img.src = customCake.image;
+                img.alt = "Custom Cake Preview";
+                img.style.maxWidth = "300px";
+                img.style.borderRadius = "10px";
+                img.style.marginTop = "10px";
+            }
+
+            const button = document.createElement("button");
+            button.innerHTML = "Add to Cart";
+            button.onclick = addToCart;
+            button.className = "add-to-cart-btn";
+
+            previewDiv.appendChild(h2);
+            previewDiv.appendChild(p);
+            previewDiv.appendChild(p1);
+            previewDiv.appendChild(p2);
+            if (img) previewDiv.appendChild(img);
+            previewDiv.appendChild(button);
+        }
+
+        function addToCart() {
+            if (!customCake.flavor || !customCake.topping || !customCake.image) {
+                alert("Please select a flavor, topping, and image before adding to cart!");
+                return;
+            }
+            customCake.name = "Custom Cake";
+            const username = localStorage.getItem("username");
+            if (!username) {
+                alert("Please log in to add items to your cart!");
+                return;
+            }
+            const cartKey = "cart_"+username;
+            const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            cart.push({...customCake});
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            alert("Custom cake added to cart!");
+        }
+
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+
+        window.onload = function() {
+            const username = localStorage.getItem("username");
+            if(!username){
+                document.getElementsByClassName("logout-btn")[0].innerHTML = "Login";
+            }
+            calculatePrice();
+            updatePreview();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        Customize Your Cake
+    </header>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="cart.html">Cart</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+    <div class="container">
+        <div class="custom-form">
+            <h2>Create Your Perfect Cake</h2>
+            <form>
+                <div class="form-group">
+                    <label for="flavor">Choose a flavor:</label>
+                    <select id="flavor" onchange="calculatePrice()">
+                        <option value="">Select Flavor</option>
+                        <option>Chocolate</option>
+                        <option>Vanilla</option>
+                        <option>Strawberry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="topping">Choose a topping:</label>
+                    <select id="topping" onchange="calculatePrice()">
+                        <option value="">Select Topping</option>
+                        <option>Sprinkles</option>
+                        <option>Fruits</option>
+                        <option>Chocolate Chips</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="preset-image">Choose a preset image:</label>
+                    <select id="preset-image" onchange="handlePresetImage()">
+                        <option value="">Select Preset</option>
+                        <option>Doraemon</option>
+                        <option>Shinchan</option>
+                        <option>Pokemon</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="image">Or upload your own image:</label>
+                    <input type="file" id="image" accept="image/*" onchange="handleUploadImage(event)">
+                </div>
+                <p id="price-display">Price: ₹0</p>
+            </form>
+        </div>
+        <div id="preview" class="preview-card"></div>
+    </div>
+</body>
+</html>

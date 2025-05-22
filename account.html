@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - Create Account</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: url('bakery-login.jpeg');
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #account-box {
+            background-color: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            animation: fadeIn 1s ease-in-out;
+            min-width: 320px;
+            margin-top:100px;
+        }
+        h1 {
+            color: #c37960;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            width: 80%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        input[type="button"] {
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #c37960;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        input[type="button"]:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <script>
+        function createAccount() {
+            const username = document.getElementById("new-username").value.trim();
+            const password = document.getElementById("new-password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (username === "" || password === "" || confirmPassword === "") {
+                alert("Please fill all fields.");
+                return;
+            }
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const userData = { username, password };
+            localStorage.setItem("user_" + username, JSON.stringify(userData));
+
+            alert("Account created successfully!");
+            window.location.href = "login.html";
+        }
+
+        function goBack() {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body>
+    <div style="position: absolute; top: 40px; width: 100%; text-align: center; z-index: 2;">
+        <h1 style="
+            color: #fff;
+            text-shadow:#555 0 0 10px;
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: 15px;
+        ">Create Your Opulent Oven Account</h1>
+    </div>
+    <div id="account-box">
+        <h1>Create Account</h1>
+        <input type="text" id="new-username" placeholder="Username"><br>
+        <input type="password" id="new-password" placeholder="Password"><br>
+        <input type="password" id="confirm-password" placeholder="Confirm Password"><br>
+        <input type="button" value="Create Account" onclick="createAccount()">
+        <input type="button" value="Back to Login" onclick="goBack()">
+    </div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - Cookies</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f1e7;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #c37960;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            float: left;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .logout-btn {
+            float: right;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            margin: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            height:30px;
+        }
+        .logout-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .menu-item {
+            position: relative;
+            width: 300px;
+            margin: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .menu-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .menu-item-details {
+            position: absolute;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .menu-item:hover .menu-item-details {
+            transform: translateY(0);
+        }
+        .menu-item-details h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .menu-item-details p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        .menu-item-details button {
+            padding: 10px 20px;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .menu-item-details button:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+    </style>
+    <script>
+        function addToCart(itemName, itemPrice, itemImage) {
+            const username = localStorage.getItem("username");
+            if (!username) {
+                alert("Please log in to add items to your cart!");
+                return;
+            }
+            const cartKey = "cart_"+username;
+            const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            cart.push({ name: itemName, price: itemPrice, image: itemImage });
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            alert(itemName+" has been added to your cart!");
+        }
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+        window.onload = function() {
+            const username = localStorage.getItem("username");
+            if(!username){
+                document.getElementsByClassName("logout-btn")[0].innerHTML = "Login";
+            }
+        };
+    </script>
+</head>
+<body>
+    <header>
+        Cookies
+    </header>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="cart.html">Cart</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+    <div class="menu-container">
+        <div class="menu-item">
+            <img src="cookie.jpeg" alt="Chocolate Chip Cookies">
+            <div class="menu-item-details">
+                <h3>Chocolate Chip Cookies</h3>
+                <p>Price: ₹100</p>
+                <button onclick="addToCart('Chocolate Chip Cookies', 100, 'cookie.jpeg')">Add to Cart</button>
+            </div>
+        </div>
+        <div class="menu-item">
+            <img src="melting.jpeg" alt="Melting Moments">
+            <div class="menu-item-details">
+                <h3>Melting Moments</h3>
+                <p>Price: ₹120</p>
+                <button onclick="addToCart('Melting Moments', 120, 'melting.jpeg')">Add to Cart</button>
+            </div>   
+        </div>
+        <div class="menu-item">
+            <img src="Macarons.jpeg" alt="Macarons">
+            <div class="menu-item-details">
+                <h3>Macarons</h3>
+                <p>Price: ₹150</p>
+                <button onclick="addToCart('Macarons', 150, 'Macarons.jpeg')">Add to Cart</button>
+            </div>   
+        </div>
+        <div class="menu-item">
+            <img src="Ginger.jpeg" alt="Ginger Bread Cookies">
+            <div class="menu-item-details">
+                <h3>Ginger Bread Cookies</h3>
+                <p>Price: ₹100</p>
+                <button onclick="addToCart('Ginger Bread Cookies', 100, 'Ginger.jpeg')">Add to Cart</button>
+            </div>   
+        </div>
+        <div class="menu-item">
+            <img src="blondie.jpeg" alt="Blondie Cookies">
+            <div class="menu-item-details">
+                <h3>Blondie Cookies</h3>
+                <p>Price: ₹130</p>
+                <button onclick="addToCart('Blondie Cookies', 130, 'blondie.jpeg')">Add to Cart</button>
+            </div>   
+        </div>
+        <div class="menu-item">
+            <img src="Mint.jpeg" alt="Mint Cookies">
+            <div class="menu-item-details">
+                <h3>Mint Cookies</h3>
+                <p>Price: ₹120</p>
+                <button onclick="addToCart('Mint Cookies', 120, 'Mint.jpeg')">Add to Cart</button>
+            </div>   
+        </div>
+    </div>
+</body>
+</html>

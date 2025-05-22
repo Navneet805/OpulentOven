@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - About Us</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f8f1e7;
+            padding: 0;
+        }
+        header {
+            background-color: #c37960;
+            color: white;
+            padding: 24px 0 18px 0;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        }
+        nav a {
+            float: left;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 1rem;
+        }
+        nav a:hover {
+            background-color: #575757;
+            color: #fffbe7;
+        }
+        .logout-btn {
+            float: right;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            margin: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            height:30px;
+        }
+        .logout-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .carousel-wrapper {
+            max-width: 99vw;
+            width: 99vw;
+            position: relative;
+        }
+        .carousel-img {
+            width: 99vw;
+            max-width: 99vw;
+            min-width: 99vw;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 0;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+            display: block;
+            transition: opacity 0.4s;
+        }
+        h2 {
+            color: #c37960;
+            font-size: 2.3rem;
+            margin: 40px 0 24px 0;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        p {
+            font-size: 1.25rem;
+            color: #444;
+            line-height: 1.85;
+            margin: 0 auto 28px auto;
+            max-width: 850px;
+            text-align: center;
+            background: rgba(255,255,255,0.85);
+            border-radius: 12px;
+            padding: 24px 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .team-section {
+            margin: 60px 0 40px 0;
+            text-align: center;
+        }
+        .team-title {
+            color: #c37960;
+            font-size: 1.6rem;
+            margin-bottom: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .team-members {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .member-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 32px 36px 24px 36px;
+            width: 220px;
+            text-align: center;
+            font-size: 1.18rem;
+            color: #c37960;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .member-card h4 {
+            margin: 0;
+            color: #c37960;
+            font-size: 1.18rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+    </style>
+    <script>
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+        const carouselImages = ["1.jpg", "2.jpg", "3.jpg"];
+        let carouselIndex = 0;
+        let carouselInterval = null;
+
+        function showCarouselImage(idx) {
+            const img = document.getElementById("carousel-img");
+            img.style.opacity = 0;
+            setTimeout(function() {
+                img.src = carouselImages[idx];
+                img.style.opacity = 1;
+            }, 200);
+        }
+
+        function nextCarousel() {
+            carouselIndex = (carouselIndex + 1) % carouselImages.length;
+            showCarouselImage(carouselIndex);
+        }
+
+        function startCarouselInterval() {
+            carouselInterval = setInterval(() => {
+                nextCarousel();
+            }, 5000); 
+        }
+        
+        window.onload = function() {
+            const username = localStorage.getItem("username");
+            if(!username){
+                document.getElementsByClassName("logout-btn")[0].innerHTML = "Login";
+            }
+            showCarouselImage(carouselIndex);
+            startCarouselInterval();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        About Us
+    </header>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="cart.html">Cart</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+    <div class="carousel-wrapper">
+        <img id="carousel-img" class="carousel-img" src="1.jpg" alt="About Opulent Oven">
+    </div>
+    <h2>About US</h2>
+    <p>
+        At Opulent Oven, we believe in crafting the finest bakery items with love and care.
+        From delicious cakes to custom creations, we aim to make every occasion special.
+    </p>
+    <p>
+        Our team of expert bakers use only the freshest ingredients to ensure every bite is a delight.
+        Whether you're celebrating a birthday, wedding, or just craving something sweet, we've got you covered!
+    </p>
+    <div class="team-section">
+        <div class="team-title">Our Team</div>
+        <div class="team-members">
+            <div class="member-card">
+                <h4>Navneet Rajesh</h4>
+            </div>
+            <div class="member-card">
+                <h4>Akash Krishna MV</h4>
+            </div>
+            <div class="member-card">
+                <h4>Devesh G</h4>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

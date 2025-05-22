@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - Menu</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f1e7;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #c37960;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        nav a {
+            float: left;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .logout-btn {
+            float: right;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            margin: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            height:30px;
+        }
+        .logout-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .menu-item {
+            position: relative;
+            width: 300px;
+            margin: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #fff;
+        }
+        .menu-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .menu-item-details {
+            position: absolute;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .menu-item:hover .menu-item-details {
+            transform: translateY(0);
+        }
+        .menu-item-details h3 {
+            margin: 1;
+            font-size: 1.2rem;
+        }
+        .menu-item-details button {
+            padding: 10px 20px;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .menu-item-details button:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+       
+    </style>
+    <script>
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+        window.onload = function() {
+            const username = localStorage.getItem("username");
+            if(!username){
+                document.getElementsByClassName("logout-btn")[0].innerHTML = "Login";
+            }
+        };
+    </script>
+</head>
+<body>
+    <header>
+        Our Menu
+    </header>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="cart.html">Cart</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+    <div class="menu-container">
+        <div class="menu-item">
+            <img src="chocolatecake.jpeg" alt="Cakes">
+            <div class="menu-item-details">
+                <h3>Cakes</h3>
+                <button onclick="window.location.href='cakes.html'">View Cakes</button>
+            </div>
+        </div>
+        <div class="menu-item">
+            <img src="vannilacake.jpeg" alt="Cupcakes">
+            <div class="menu-item-details">
+                <h3>Cupcakes</h3>
+                <button onclick="window.location.href='cupcake.html'">View Cupcakes</button>
+            </div>
+        </div>
+        <div class="menu-item">
+            <img src="cookie.jpeg" alt="Cookies">
+            <div class="menu-item-details">
+                <h3>Cookies</h3>
+                <button onclick="window.location.href='cookies.html'">View Cookies</button>
+            </div>
+        </div>
+        <div class="menu-item">
+            <img src="croissant.jpeg" alt="Pastries">
+            <div class="menu-item-details">
+                <h3>Pastries</h3>
+                <button onclick="window.location.href='pastries.html'">View Pastries</button>
+            </div>
+        </div>
+        <div class="menu-item">
+            <img src="customcake.jpeg" alt="Custom Cake">
+            <div class="menu-item-details">
+                <h3>Custom Cake</h3>
+                <button onclick="window.location.href='customcake.html'">Custom Cake</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

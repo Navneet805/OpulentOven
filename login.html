@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - Login</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: url('bakery-login.jpeg');
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #login-box {
+            background-color: rgba(255,255,255,0.95);
+            padding: 30px;
+            padding-top:10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            animation: fadeIn 1s;
+            min-width: 320px;
+            margin-top: 100px;
+        }
+        h1 {
+            color: #c37960;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            width: 80%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        label {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        input[type="button"] {
+            padding: 10px 20px;
+            margin: 10px;
+            margin-bottom: 0px;
+            border-radius: 5px;
+            border: none;
+            background-color: #c37960;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        input[type="button"]:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }   
+        a {
+            color: #c37960;
+            text-decoration: none;
+            font-size: 1rem;
+            display: block;
+            margin-top: 10px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .toggle-password {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #c37960;
+            margin-top: 5px;
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <script>
+        function login() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (username === "" || password === "") {
+                alert("Please enter both username and password.");
+                return;
+            }
+
+            const userData = localStorage.getItem("user_" + username);
+
+            if (!userData) {
+                alert("Account not found. Please create an account first.");
+                return;
+            }
+
+            const user = JSON.parse(userData);
+
+            if (user.password === password) {
+                localStorage.setItem("username", username); 
+                window.location.href = "home.html";
+            } else {
+                alert("Incorrect password. Please try again.");
+            }
+        }
+
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <div style="position: absolute; top: 40px; width: 100%; text-align: center; z-index: 2;">
+        <h1 style="
+            color: #fff;
+            font-size: 3.5rem;
+            text-shadow: #555 0px 0px 10px;
+            letter-spacing: 2px;
+            font-weight: 800;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: 15px;
+        ">Welcome to Opulent Oven</h1>
+    </div>
+    <div id="login-box">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Enter your username"><br>
+        <input type="password" id="password" placeholder="Enter your password"><br>
+        <span class="toggle-password" onclick="togglePassword()">Show/Hide Password</span>
+        <input type="button" value="Login" onclick="login()">
+        <a href="account.html">Create Account</a>
+        <a href="home.html">Continue Without Logging In</a>
+    </div>
+</body>
+</html>

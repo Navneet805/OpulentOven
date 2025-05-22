@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opulent Oven - Cart</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f1e7;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #c37960;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            float: left;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .logout-btn {
+            float: right;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            margin: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            height:30px;
+        }
+        .logout-btn:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .cart-item {
+            background-color: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cart-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .cart-item img {
+            max-width: 100px;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item h2, .cart-item p {
+            margin: 0;
+        }
+        .cart-item p {
+            margin-top: 5px;
+            color: #555;
+        }
+        .remove-button {
+            padding: 5px 10px;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .remove-button:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+        .total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #c37960;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #894e34;
+            transform: scale(1.05);
+        }
+    </style>
+    <script>
+        function displayCart() {
+            const container = document.getElementById("cart-items");
+            const username = localStorage.getItem("username");
+            let total = 0;
+
+            if (!username) {
+                container.innerHTML = "<p style='color:#c37960;font-size:1.2rem;'>Please log in to view your cart.</p>";
+                document.getElementsByClassName("logout-btn")[0].innerHTML = "Login";
+                document.getElementById("total-price").textContent = "";
+                document.getElementById("checkout").style.display = "none";
+                return;
+            } 
+            const cartItems = JSON.parse(localStorage.getItem("cart_"+username)) || [];
+
+            container.innerHTML = "";
+
+            if (cartItems.length === 0) {
+                container.innerHTML = "<p>Your cart is empty.</p>";
+                document.getElementById("total-price").textContent = "";
+                return;
+            }
+
+            cartItems.forEach((item, index) => {
+                const div = document.createElement("div");
+                div.className = "cart-item";
+                let detailsHtml = 
+                `
+                    <img src="${item.image}" alt="Item Image">
+                    <div class="cart-item-details">
+                        <h2>${item.name || "Custom Cake"}</h2>
+                `;
+                if (item.name === "Custom Cake") {
+                    detailsHtml += `
+                        <p>Flavor: ${item.flavor}</p>
+                        <p>Topping: ${item.topping}</p>
+                    `;
+                }
+                detailsHtml += `
+                        <p>Price: ₹${item.price}</p>
+                    </div>
+                    <button class="remove-button" onclick="removeFromCart(${index})">Remove</button>
+                `;
+                div.innerHTML = detailsHtml;
+                container.appendChild(div);
+                total += Number(item.price) || 0;
+            });
+
+            document.getElementById("total-price").textContent = "Total: ₹"+total;
+        }
+
+        function removeFromCart(index) {
+            const username = localStorage.getItem("username");
+            let cartItems = JSON.parse(localStorage.getItem("cart_"+username)) || [];
+            cartItems.splice(index, 1);
+            localStorage.setItem("cart_"+username, JSON.stringify(cartItems));
+            displayCart();
+        }
+
+        function proceedToCheckout() {
+            window.location.href = "checkout.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+        
+    </script>
+</head>
+<body onload="displayCart()">
+    <header>
+        Your Cart
+    </header>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="cart.html">Cart</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+    <div class="container">
+        <div id="cart-items">
+        </div>
+        <div class="total" id="total-price">
+        </div>
+        <button id="checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
+    </div>
+</body>
+</html>
